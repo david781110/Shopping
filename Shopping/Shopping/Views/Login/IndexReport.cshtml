@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Shopping.Models.SalesOrderHeader>
+
+@{
+    ViewData["Title"] = "IndexReport";
+}
+
+<h1>IndexReport</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model=>model.SalesOrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.SalesOrderNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseOrderNumber)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model=>model.CustomerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShipMethod)
+            </th>
+            <th>
+                訂單明細（SalesOrderDetail）
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.SalesOrderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalesOrderNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.PurchaseOrderNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipMethod)
+                </td>
+                <td>
+                    <!-- (1) ******************************************** 自己動手寫、自己動手改 *******  -->
+                    @*@Html.DisplayFor(modelItem => item.SalesOrderDetails)*@  <!-- 畫面上會出現兩筆「訂單編號（SalesOrderId）」 -->
+                @Html.DisplayFor(modelItem =>item.SalesOrderDetails.Count)
+                    @foreach (var DetailsItem in item.SalesOrderDetails)
+                    {
+                        @:<hr />產品編號
+                        @Html.DisplayFor(d=>DetailsItem.ProductId)
+
+                        <br />
+                        @*@Html.ActionLink("Deatails(產品明細)","DetailsPicture","Shop",new { id = DetailsItem.ProductId })<br />*@
+                        <a asp-action="DetailsPicture" asp-controller="Shop" asp-route-id="@DetailsItem.ProductId">Deatails(產品明細)</a>
+
+                        @:<br/>訂購數量
+                        @Html.DisplayFor(d=>DetailsItem.OrderQty)<br />
+                    }
+                </td>
+
+
+               @* <td>
+                    <a asp-action="Edit" asp-route-id="@item.SalesOrderId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.SalesOrderId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SalesOrderId">Delete</a>
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
